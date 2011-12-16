@@ -1,0 +1,5 @@
+C:\Users\ktraff\Documents\Visual C# 2010\Projects\TriangleMaxSum\TriangleSum\bin\Debug\TriangleSum.exe
+C:\Users\ktraff\Documents\Visual C# 2010\Projects\TriangleMaxSum\TriangleSum\bin\Debug\TriangleSum.pdb
+C:\Users\ktraff\Documents\Visual C# 2010\Projects\TriangleMaxSum\TriangleSum\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\ktraff\Documents\Visual C# 2010\Projects\TriangleMaxSum\TriangleSum\obj\x86\Debug\TriangleSum.exe
+C:\Users\ktraff\Documents\Visual C# 2010\Projects\TriangleMaxSum\TriangleSum\obj\x86\Debug\TriangleSum.pdb
