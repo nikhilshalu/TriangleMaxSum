@@ -31,16 +31,27 @@ namespace TriangleMaxSum
         // Represents a triangle of integers, each index representing a level of the triangle
         private List<List<int>> _triangle;
         public List<List<int>> triangle { get { return _triangle; } set { _triangle = value; } }
+        // Keeps track of the largest path at each node of the triangle in order to find solutions
+        // to large problem sets
+        private List<List<int>> _cache;
+        public List<List<int>> cache { get { return _cache; } set { _cache = value; } }
 
         public TriangleSum(string file)
         {
             _triangle = new List<List<int>>();
+            _cache = new List<List<int>>();
 
             if (read(file))
             {
-                maxPath = new Path();
-                calculateMaxPath(new Path(_triangle[0][0]));
+                _maxPath = new Path();
+                addCacheEntry(0, 0, triangle[0][0]);
+                calculateMaxPath(new Path(triangle[0][0]));
             }
+        }
+
+        private void addCacheEntry(int level, int index, int sum)
+        {
+            _cache[level][index] = sum;
         }
 
         /// <summary>
@@ -55,6 +66,14 @@ namespace TriangleMaxSum
         private void calculateMaxPath(Path curPath)
         {
             if (curPath.level >= _triangle.Count) return; // finished
+            if (isCached(curPath))
+            {
+
+            }
+            else
+            {
+
+            }
             // Create two child objects and add their child nodes
             Path leftChild = createChild(curPath, curPath.getParentIndex());
             Path rightChild = createChild(curPath, curPath.getParentIndex() + 1);            
@@ -86,6 +105,16 @@ namespace TriangleMaxSum
             } 
 
             return child;
+        }
+
+        /// <summary>
+        /// Determines if a cached entry exists containing the path with the largest sum
+        /// up to the current level of the triangle.
+        /// </summary>
+        /// <returns>true if a cached entry exists</returns>
+        public bool isCached(Path path)
+        {
+            return _cache[path.level][path.getParentIndex()] != int.MinValue;
         }
 
         /// <summary>Prints the elements in _maxPath</summary>
@@ -129,11 +158,21 @@ namespace TriangleMaxSum
                         int number;
                         if (int.TryParse(numStr, out number))
                         {
-                            if (i < _triangle.Count) _triangle[i].Add(number);
-                            else
-                            { // add a new level to the triangle collection
-                                while (i >= _triangle.Count) _triangle.Add(new List<int>());
+                            if (i < _triangle.Count)
+                            {
                                 _triangle[i].Add(number);
+                                // add an initial cached value to be updated during calculation
+                                _cache[i].Add(int.MinValue);
+                            }
+                            else
+                            { // add a new level to the triangle and the cache collections
+                                while (i >= _triangle.Count)
+                                {
+                                    _triangle.Add(new List<int>());
+                                    _cache.Add(new List<int>());
+                                }
+                                _triangle[i].Add(number);
+                                _cache[i].Add(int.MinValue);
                             }
                             elementCount++;
                         }
