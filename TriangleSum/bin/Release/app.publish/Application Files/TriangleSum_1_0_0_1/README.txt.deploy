@@ -6,16 +6,7 @@
 
 Usage: FindMaxSum <input-file-1> <input-file-2> ... <input-file-N>
 
-Input File: An input file should contain one or more rows of integers.  Each row will have
-one more integer than the previous row. An example of a valid input file is below:
-<BOF>
-3
-7 4
-2 5 6
-8 5 9 3
-<EOF>
-
-Solution: Given a triangle (contained in an input file) like the one below:
+Given a triangle (contained in an input file) like the one below:
 
         3
        7 4
@@ -39,6 +30,7 @@ function findMaxPath(path)
 		findMaxPath(rightChild)
 
 Advantages to this approach: 
+
 - Versatile: This solution is fairly versatile in that it could be extended to 
 find the maximum path to any node in the triangle.  It could also be extended to find paths 
 using different traversal constraints (for instance, the parent's children could only be 2 
@@ -52,5 +44,6 @@ that is dynamically resized to fit the triangle's dimensions.  This minimizes ob
 overhead as well as the overhead of building a bulky rectangular-shaped array. 
 
 Disadvantages to this approach:
+
 - Recursion: the space complexity of using a recursive implementation adds O(2^N) space because
 each level of the triangle requires two recursive calls (though caching minimizes this impact)
