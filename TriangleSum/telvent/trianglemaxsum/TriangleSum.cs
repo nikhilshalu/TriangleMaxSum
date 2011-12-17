@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
 
 //-----------------------------------------------------------------------
-// <copyright file="Program.cs" >
+// <copyright file="TriangleSum.cs" >
 //     Copyright (c) Kyle Traff.  All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
@@ -35,17 +33,22 @@ namespace TriangleMaxSum
         // to large problem sets
         private List<List<int>> _cache;
         public List<List<int>> cache { get { return _cache; } set { _cache = value; } }
+        // Keep track of relevant statistics to measure performance
+        private Statistics _stats;
+        public Statistics stats { get { return _stats; } set { _stats = value; } }
 
         public TriangleSum(string file)
         {
             _triangle = new List<List<int>>();
             _cache = new List<List<int>>();
+            _stats = new Statistics();
 
             if (read(file))
-            {
+            { // no errors reading in the triangle from the input file, now search
                 _maxPath = new Path();
-                addCacheEntry(0, 0, triangle[0][0]);
-                calculateMaxPath(new Path(triangle[0][0]));
+                _stats.start();
+                calculateMaxPath(new Path(_triangle[0][0]));
+                _stats.end();
             }
         }
 
@@ -58,7 +61,8 @@ namespace TriangleMaxSum
         /// Finds the path with the maximum sum by traversing (from top to bottom)
         /// moves only to adjacent numbers on the row directly below.  Declared private
         /// because we only want this method to be called if the input file contains no
-        /// errors.
+        /// errors.  (Note: this can be called at any node in the tree, so a max path can
+        /// be found for any node in the tree)
         /// </summary>
         /// <param name="curPath">
         /// The current path from the top of the triangle to the current node
@@ -66,23 +70,21 @@ namespace TriangleMaxSum
         private void calculateMaxPath(Path curPath)
         {
             if (curPath.level >= _triangle.Count) return; // finished
-            if (isCached(curPath))
+            if (!isCached(curPath))
             {
+                // add the current node to the cache
+                addCacheEntry(curPath.level, curPath.getParentIndex(), curPath.sum);
 
+                // Create two child objects and add their child nodes
+                Path leftChild = createChild(curPath, curPath.getParentIndex());
+                Path rightChild = createChild(curPath, curPath.getParentIndex() + 1);
+
+                if (curPath.sum > _maxPath.sum) _maxPath = curPath;
+
+                // Check the adjacent children
+                calculateMaxPath(leftChild);
+                calculateMaxPath(rightChild);
             }
-            else
-            {
-
-            }
-            // Create two child objects and add their child nodes
-            Path leftChild = createChild(curPath, curPath.getParentIndex());
-            Path rightChild = createChild(curPath, curPath.getParentIndex() + 1);            
-
-            if (curPath.sum > _maxPath.sum) _maxPath = curPath;
-
-            // Check the adjacent children
-            calculateMaxPath(leftChild);
-            calculateMaxPath(rightChild);
         }
 
         /// <summary>Creates a child path based on the parent's path and the index to the child</summary>
@@ -111,10 +113,24 @@ namespace TriangleMaxSum
         /// Determines if a cached entry exists containing the path with the largest sum
         /// up to the current level of the triangle.
         /// </summary>
-        /// <returns>true if a cached entry exists</returns>
+        /// <returns>
+        /// true if, for any node on the path, a cached entry exists and is larger than 
+        /// the sum given in the current path, meaning that a different path necessarily
+        /// is more maximal than the current path
+        /// </returns>
         public bool isCached(Path path)
         {
-            return _cache[path.level][path.getParentIndex()] != int.MinValue;
+            List<int> curPath = path.path;
+            int runningSum = 0;
+            for (int i = 0; i < curPath.Count; i++)
+            {
+                // The current largest sum of any path visiting this node
+                int cachedSum = _cache[i][curPath[i]];
+                runningSum += _triangle[i][curPath[i]];
+                // there exists a path with a larger sum than the current path
+                if (cachedSum > runningSum) return true;
+            }
+            return false;
         }
 
         /// <summary>Prints the elements in _maxPath</summary>

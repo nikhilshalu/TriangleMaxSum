@@ -1,28 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 //-----------------------------------------------------------------------
-// <copyright file="Program.cs" >
+// <copyright file="FindMaxSum.cs" >
 //     Copyright (c) Kyle Traff.  All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 namespace TriangleMaxSum
 {
-    /// <summary>Application Driver</summary>
+    /// <summary>Drives the application</summary>
     class FindMaxSum
     {
         public static void Main(string[] args)
         {
             if (args.Length > 0)
             {
-                TriangleSum triangleSum = new TriangleSum(args[0]);
-                if (triangleSum.maxPath != null) Console.WriteLine("Max Path for file {0}: {1}", args[0], triangleSum.printMaxPath()); 
+                for (int i = 0; i < args.Length; i++)
+                {
+                    TriangleSum triangleSum = new TriangleSum(args[i]);
+                    if (triangleSum.maxPath != null)
+                    {
+                        Console.WriteLine("Max Path for file {0}: {1}", args[i], triangleSum.printMaxPath());
+                        Console.WriteLine("Time: " + triangleSum.stats.time());
+                        Console.WriteLine("Memory Footprint: " + triangleSum.stats.memoryFootprint());
+                    }
+                    Console.WriteLine();
+                    Console.WriteLine();
+                }
             }
             else
-            {
-                Console.WriteLine("usage: TriangleMaxSum <input-file>"); 
+            { // no input file specified
+                Console.WriteLine("Usage: FindMaxSum <input-file-1> <input-file-2> ... <input-file-N>"); 
             }
             
             Console.WriteLine("Press any key to close");

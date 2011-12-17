@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 //-----------------------------------------------------------------------
-// <copyright file="Program.cs" >
+// <copyright file="Path.cs" >
 //     Copyright (c) Kyle Traff.  All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
