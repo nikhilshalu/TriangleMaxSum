@@ -29,7 +29,7 @@ namespace TriangleMaxSum
             }
             else
             { // no input file specified
-                Console.WriteLine("Usage: FindMaxSum <input-file-1> <input-file-2> ... <input-file-N>"); 
+                Console.WriteLine("Usage: TriangleSum.exe <input-file-1> <input-file-2> ... <input-file-N>"); 
             }
             
             Console.WriteLine("Press any key to close");
